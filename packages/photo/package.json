@@ -7,6 +7,7 @@
   "types": "dist/index.d.ts",
   "author": "any86",
   "dependencies": {
+    "@5a/css": "^0.0.9",
     "any-event": "^0.7.7",
     "tslib": "^1.9.3"
   },
@@ -19,5 +20,11 @@
   "keywords": [],
   "sideEffects": false,
   "license": "ISC",
-  "gitHead": "8c4d4c4275332966a19678c01de5228f21d1394f"
+  "gitHead": "8c4d4c4275332966a19678c01de5228f21d1394f",
+  "devDependencies": {
+    "chalk": "^4.1.0",
+    "gh-pages": "^3.1.0",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "shelljs": "^0.8.4"
+  }
 }

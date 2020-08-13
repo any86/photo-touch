@@ -4,6 +4,7 @@ import loadImage from './loadImage'
 export type Point = [number, number];
 
 export default class extends AnyEvent {
+
     img?: HTMLImageElement;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D | null;
@@ -44,6 +45,7 @@ export default class extends AnyEvent {
         this.context = this.canvas.getContext('2d');
     }
 
+    
     get rad(): number {
         return this.angle * Math.PI / 180;
     }
@@ -126,8 +128,8 @@ export default class extends AnyEvent {
      * 换图
      * @param img 
      */
-    changeImg(img: HTMLImageElement) {
-        this.img = img;
+    async changeImg(img: HTMLImageElement|string) {
+        this.img = await loadImage(img);
         this.reset();
     }
 

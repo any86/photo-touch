@@ -5,31 +5,26 @@ const { nodeResolve } = require('@rollup/plugin-node-resolve');
 import { version } from './package.json';
 
 export default {
-    input: 'src/index.ts',
+    input: 'packages/photo-touch/src/index.ts',
 
     plugins: [
-        nodeResolve(),
         typescript({
             exclude: 'node_modules/**',
             typescript: require('typescript'),
         }),
+        nodeResolve(),
         json(),
         replace({
             __VERSION__: version
         })
     ],
 
-    external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
+    // external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
     
     output: [{
-        format: 'es',
+        format: 'umd',
         name: 'PhotoTouch',
-        file: `dist/index.es.js`,
-        sourcemap:true
-    },{
-        format: 'cjs',
-        name: 'PhotoTouch',
-        file: `dist/index.js`,
+        file: `./packages/photo-touch/dist/index.umd.js`,
         sourcemap:true
     }]
 };
