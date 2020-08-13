@@ -1,0 +1,26 @@
+{
+  "name": "photo-touch",
+  "version": "0.0.2-a0.0",
+  "description": "",
+  "main": "./dist/index",
+  "module": "./dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "author": "any86",
+  "peerDependencies": {
+    "tslib": "^1.9.3",
+    "any-touch":"^0.7.7"
+  },
+  "dependencies": {
+    "@photo-touch/photo": "^0.0.2-a0.0"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [],
+  "sideEffects": false,
+  "license": "ISC",
+  "gitHead": "8c4d4c4275332966a19678c01de5228f21d1394f"
+}
