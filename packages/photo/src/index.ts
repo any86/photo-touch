@@ -14,6 +14,9 @@ export default class extends AnyEvent {
     org: Point = [0, 0];
     angle = 0;
     scale = 1;
+
+    debug = false;
+
     // 覆盖层图片
     overlays: HTMLImageElement[] | string[] = [];
     // 背景图
@@ -25,12 +28,14 @@ export default class extends AnyEvent {
 
     // 原始坐标系原点与图片左上角距离
     offsetInOA: Point = [0, 0];
+
     // 形变坐标系原点与图片左上角距离
     private offsetInOB: Point = [0, 0];
     private _timeout = -1;
 
-    constructor(el: HTMLCanvasElement, width = 400, height = 300) {
+    constructor(el: HTMLCanvasElement, width = 400, height = 300, debug = false) {
         super();
+        this.debug = debug;
         el.width = width;
         el.height = height;
         this.canvasWidth = width;
@@ -75,8 +80,10 @@ export default class extends AnyEvent {
                 imgHeight
             );
             // debug
-            // context.fillStyle = '#d10';
-            // context.fillRect(-30 / scale, -30 / scale, 60 / scale, 60 / scale);
+            if (this.debug) {
+                context.fillStyle = '#d10';
+                context.fillRect(-30 / scale, -30 / scale, 60 / scale, 60 / scale);
+            }
 
             context.restore();
             // 覆盖层
