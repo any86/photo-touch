@@ -22,33 +22,10 @@ export default class extends Core {
             this.emit('change-org', newOrg);
         }
 
-        at.on('tap', _changeOrg);
-        at.on('pinchstart', _changeOrg);
-        at.on('rotatestart', _changeOrg);
+        at.on(['tap', 'pinchstart', 'rotatestart'], _changeOrg);
 
-        at.on('panstart', (e: AnyTouchEvent) => {
-            this.emit('panstart', e);
-        });
-
-        at.on('pinchstart', (e: AnyTouchEvent) => {
-            this.emit('pinchstart', e);
-        });
-
-        at.on('rotatestart', (e: AnyTouchEvent) => {
-            this.emit('rotatestart', e);
-        });
-
-
-        at.on('panend', (e: AnyTouchEvent) => {
-            this.emit('panend', e);
-        });
-
-        at.on('pinchend', (e: AnyTouchEvent) => {
-            this.emit('pinchend', e);
-        });
-
-        at.on('rotateend', (e: AnyTouchEvent) => {
-            this.emit('rotateend', e);
+        at.on('at:after', e => {
+            this.emit(e.type, e);
         });
 
         at.on('panmove', (e: AnyTouchEvent) => {
@@ -57,7 +34,7 @@ export default class extends Core {
         });
 
 
-        at.on('pinchmove', ({ deltaScale, scale }: AnyTouchEvent) => {
+        at.on('pinchmove', ({ deltaScale }: AnyTouchEvent) => {
             this.zoom(deltaScale);
         });
 

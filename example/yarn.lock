@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@5a/css@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.npm.taobao.org/@5a/css/download/@5a/css-0.0.9.tgz#f14e1a1dacc97a207b0cb495db473441884cfdd5"
+  integrity sha1-8U4aHazJeiB7DLSV20c0QYhM/dU=
+  dependencies:
+    rimraf "^3.0.0"
+
 "@ant-design-vue/babel-helper-vue-transform-on@^1.0.0":
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/@ant-design-vue/babel-helper-vue-transform-on/download/@ant-design-vue/babel-helper-vue-transform-on-1.0.1.tgz#d219d92f4e1fc5e7add211c347c7fa000518b623"
@@ -6606,6 +6613,13 @@ rimraf@^2.5.4, rimraf@^2.6.3, rimraf@^2.7.1:
   version "2.7.1"
   resolved "https://registry.npm.taobao.org/rimraf/download/rimraf-2.7.1.tgz#35797f13a7fdadc566142c29d4f07ccad483e3ec"
   integrity sha1-NXl/E6f9rcVmFCwp1PB8ytSD4+w=
+  dependencies:
+    glob "^7.1.3"
+
+rimraf@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.npm.taobao.org/rimraf/download/rimraf-3.0.2.tgz#f1a5402ba6220ad52cc1282bac1ae3aa49fd061a"
+  integrity sha1-8aVAK6YiCtUswSgrrBrjqkn9Bho=
   dependencies:
     glob "^7.1.3"
 

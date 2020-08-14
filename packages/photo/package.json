@@ -7,8 +7,7 @@
   "types": "dist/index.d.ts",
   "author": "any86",
   "dependencies": {
-    "@5a/css": "^0.0.9",
-    "any-event": "^0.7.7",
+    "any-event": "^0.7.8",
     "tslib": "^1.9.3"
   },
   "files": [

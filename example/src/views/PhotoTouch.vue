@@ -2,7 +2,7 @@
     <article class="p-3">
         <section class="d-flex pos-r">
             <canvas ref="canvas" style="width:100%;"></canvas>
-            <div class="pos-a" style="width:50px; right:-20px;top:16px;">
+            <div v-if="null !== img" class="pos-a" style="width:50px; right:-20px;top:16px;">
                 <button
                     class="a-button a-button--dark ml-1"
                     style="background:rgba(0, 0, 0, 0.6); color:#fff;"
@@ -34,8 +34,8 @@
                 </button>
 
                 <button
-                    class="a-button a-button--dark mt-1"
-                    style="background:rgba(0, 0, 0, 0.6); color:#fff;"
+                    class="a-button a-button--danger mt-1"
+                    style="background:rgba(255, 0, 0, 0.6); color:#fff;"
                     @click="togglePreview"
                 >
                     <i :class="[`ion-md-eye${isShowLine ? '' : '-off'}`]" class="font-1"></i>
@@ -141,7 +141,7 @@ export default {
             offset: [0, 0],
             width: 1642,
             height: 2434,
-            background: 'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_6cf0cab4-3c19-4ff6-b203-2c430f4ebf64.png?v=1597329472',
+            background: '#fff',
 
             lineOverlays: ['https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_a8cc865c-b6cd-4457-b306-d5fdf800a42e.png?v=1597329680'],
 
@@ -173,27 +173,11 @@ export default {
             this.org = org;
         });
 
-        this.photoTouch.on('panstart', () => {
+        this.photoTouch.on(['panstart','pinchstart','rotatestart','tap'], () => {
             this.isShowLine = true;
         });
 
-        this.photoTouch.on('panend', () => {
-            this.isShowLine = false;
-        });
-
-        this.photoTouch.on('pinchstart', () => {
-            this.isShowLine = true;
-        });
-
-        this.photoTouch.on('pinchend', () => {
-            this.isShowLine = false;
-        });
-
-        this.photoTouch.on('rotatestart', () => {
-            this.isShowLine = true;
-        });
-
-        this.photoTouch.on('rotateend', () => {
+        this.photoTouch.on(['panend','pinchend','rotateend'], () => {
             this.isShowLine = false;
         });
     },
@@ -219,6 +203,11 @@ export default {
 </script>
 
 <style scope lang="scss">
+article{
+    max-width: 640px;
+    margin:auto;
+}
+
 canvas {
     cursor: move;
 }

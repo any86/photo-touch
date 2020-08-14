@@ -17,6 +17,7 @@
         "crop"
     ],
     "scripts": {
+        "bootstrap":"lerna bootstrap",
         "dev:ex": "cd example && npm run serve",
         "build:ex": "cd example && npm run build",
         "release:ex": "npm run build:ex && node ./scripts/releaseExample.js",

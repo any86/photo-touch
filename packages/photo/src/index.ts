@@ -16,8 +16,6 @@ export default class extends AnyEvent {
     angle = 0;
     scale = 1;
 
-    debug = false;
-
     // 覆盖层图片
     overlays: HTMLImageElement[] | string[] = [];
     // 背景图
@@ -34,9 +32,8 @@ export default class extends AnyEvent {
     private offsetInOB: Point = [0, 0];
     private _timeout = -1;
 
-    constructor(el: HTMLCanvasElement, width = 400, height = 300, debug = false) {
+    constructor(el: HTMLCanvasElement, width = 400, height = 300) {
         super();
-        this.debug = debug;
         el.width = width;
         el.height = height;
         this.canvasWidth = width;
@@ -81,8 +78,9 @@ export default class extends AnyEvent {
                 imgWidth,
                 imgHeight
             );
+
             // debug
-            if (this.debug) {
+            if('development' === process.env.NODE_ENV){
                 context.fillStyle = '#d10';
                 context.fillRect(-30 / scale, -30 / scale, 60 / scale, 60 / scale);
             }
