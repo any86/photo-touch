@@ -17,9 +17,9 @@ export default class extends AnyEvent {
     scale = 1;
 
     // 覆盖层图片
-    overlays: HTMLImageElement[] | string[] = [];
+    overlayImages: HTMLImageElement[] = [];
     // 背景图
-    backgrounds: HTMLImageElement[] | string[] = [];
+    backgroundImages: HTMLImageElement[] = [];
 
     // 图片适配view后的尺寸
     imgWidth = 0;
@@ -42,7 +42,7 @@ export default class extends AnyEvent {
         this.context = this.canvas.getContext('2d');
     }
 
-    
+
     get rad(): number {
         return this.angle * Math.PI / 180;
     }
@@ -58,8 +58,8 @@ export default class extends AnyEvent {
             this.drawChessboard(context);
 
             // 背景层
-            for (const backgroundImage of this.backgrounds) {
-                context.drawImage(await loadImage(backgroundImage), 0, 0, this.canvasWidth, this.canvasHeight);
+            for (const backgroundImage of this.backgroundImages) {
+                context.drawImage(backgroundImage, 0, 0, this.canvasWidth, this.canvasHeight);
             }
 
             // 用户图
@@ -80,15 +80,15 @@ export default class extends AnyEvent {
             );
 
             // debug
-            if('development' === process.env.NODE_ENV){
+            if ('development' === process.env.NODE_ENV) {
                 context.fillStyle = '#d10';
                 context.fillRect(-30 / scale, -30 / scale, 60 / scale, 60 / scale);
             }
 
             context.restore();
             // 覆盖层
-            for (const overlayImage of this.overlays) {
-                context.drawImage(await loadImage(overlayImage), 0, 0, this.canvasWidth, this.canvasHeight);
+            for (const overlayImage of this.overlayImages) {
+                context.drawImage(overlayImage, 0, 0, this.canvasWidth, this.canvasHeight);
             }
             this.emit('transform', {
                 offset: this.offsetInOA,
@@ -112,23 +112,35 @@ export default class extends AnyEvent {
      * 换覆盖层图片
      * @param overlays 覆盖图(多)
      */
-    changeOverlay(...overlays: HTMLImageElement[] | string[]) {
-        this.overlays = overlays;
+    async changeOverlay(...overlays: HTMLImageElement[] | string[]) {
+        this.emit('loading');
+        this.overlayImages = [];
+        for (const overlay of overlays) {
+            this.overlayImages.push(await loadImage(overlay));
+        }
         this.render();
+        this.emit('loaded');
     }
 
-    changeBackground(...backgrounds: HTMLImageElement[]) {
-        this.backgrounds = backgrounds;
+    async changeBackground(...backgrounds: HTMLImageElement[] | string[]) {
+        this.emit('loading');
+        this.backgroundImages = [];
+        for (const background of backgrounds) {
+            this.backgroundImages.push(await loadImage(background));
+        }
         this.render();
+        this.emit('loaded');
     }
 
     /**
      * 换图
      * @param img 
      */
-    async changeImg(img: HTMLImageElement|string) {
+    async changeImg(img: HTMLImageElement | string) {
+        this.emit('loading');
         this.img = await loadImage(img);
         this.reset();
+        this.emit('loaded');
     }
 
     /**

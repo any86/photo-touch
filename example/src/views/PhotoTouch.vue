@@ -130,7 +130,7 @@ export default {
 
     data() {
         return {
-            img:null,
+            img: null,
             isShowLine: false,
             photoTouch: null,
             overlayImgs: [],
@@ -143,7 +143,9 @@ export default {
             height: 2434,
             background: '#fff',
 
-            lineOverlays: ['https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_a8cc865c-b6cd-4457-b306-d5fdf800a42e.png?v=1597329680'],
+            lineOverlays: [
+                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_a8cc865c-b6cd-4457-b306-d5fdf800a42e.png?v=1597329680',
+            ],
 
             previewOverlays: [
                 'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11.png?v=1597309733',
@@ -154,7 +156,7 @@ export default {
 
     watch: {
         isShowLine(isShowLine) {
-            const {img} = this;
+            const { img } = this;
             if (isShowLine) {
                 this.photoTouch.changeOverlay(...this.lineOverlays);
             } else {
@@ -173,12 +175,20 @@ export default {
             this.org = org;
         });
 
-        this.photoTouch.on(['panstart','pinchstart','rotatestart','tap'], () => {
+        this.photoTouch.on(['panstart', 'pinchstart', 'rotatestart', 'tap'], () => {
             this.isShowLine = true;
         });
 
-        this.photoTouch.on(['panend','pinchend','rotateend'], () => {
+        this.photoTouch.on(['panend', 'pinchend', 'rotateend'], () => {
             this.isShowLine = false;
+        });
+
+        this.photoTouch.on('loading', () => {
+            console.log('loading');
+        });
+
+        this.photoTouch.on('loaded', () => {
+            console.log('loaded');
         });
     },
 
@@ -203,9 +213,9 @@ export default {
 </script>
 
 <style scope lang="scss">
-article{
+article {
     max-width: 640px;
-    margin:auto;
+    margin: auto;
 }
 
 canvas {
