@@ -1,13 +1,13 @@
 {
     "name": "photo-touch",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "",
     "main": "./dist/index",
     "module": "./dist/index.es.js",
     "types": "dist/index.d.ts",
     "author": "any86",
     "dependencies": {
-        "@photo-touch/photo": "^0.0.3",
+        "@photo-touch/photo": "^0.0.4",
         "any-touch": "^0.7.8",
         "tslib": "^1.9.3"
     },
