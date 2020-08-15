@@ -26,6 +26,7 @@ export default function loadImage (url: string | HTMLImageElement): Promise<HTML
             }
 
             const img = new Image();
+            img.setAttribute("crossOrigin",'Anonymous');
             img.onload = () => {
                 cache[url] = img;
                 resolve(img);

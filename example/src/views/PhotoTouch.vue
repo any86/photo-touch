@@ -2,6 +2,7 @@
     <article class="p-3">
         <section class="d-flex pos-r">
             <canvas ref="canvas" style="width:100%;"></canvas>
+            <p v-if="loading">loading</p>
             <div v-if="null !== img" class="pos-a" style="width:50px; right:-20px;top:16px;">
                 <button
                     class="a-button a-button--dark ml-1"
@@ -49,11 +50,11 @@
                 @loaded="onImageLoaded"
             >Change Photo</ButtonLoadFile>
 
-            <button class="a-button a-button--primary flex-1">
+            <button class="a-button a-button--primary flex-1" @click="toDataURL">
                 <i class="ion-md-checkmark font-1" style="vertical-align: sub;"></i> Done
             </button>
         </div>
-
+        <img style="width:100%;" :src="dataURL" />
         <section>
             <hr class="mt-2" />
             <!-- Offset -->
@@ -130,6 +131,8 @@ export default {
 
     data() {
         return {
+            dataURL: '',
+            loading: false,
             img: null,
             isShowLine: false,
             photoTouch: null,
@@ -144,12 +147,12 @@ export default {
             background: '#fff',
 
             lineOverlays: [
-                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_a8cc865c-b6cd-4457-b306-d5fdf800a42e.png?v=1597329680',
+                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_b44dc4e2-3e32-4b51-80de-675d8a273aed.png?v=1597476179',
             ],
 
             previewOverlays: [
-                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11.png?v=1597309733',
-                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_16fe288a-66aa-466b-b408-1dd591e4cce9.png?v=1597329488',
+                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_0d08b826-a84d-4224-aca2-4f928c6fe6e5.png?v=1597476180',
+                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/iPhone11_9fa84a77-f492-424d-be4c-6241e4aa6bd7.png?v=1597476180',
             ],
         };
     },
@@ -157,12 +160,14 @@ export default {
     watch: {
         isShowLine(isShowLine) {
             const { img } = this;
+            this.loading = true;
             if (isShowLine) {
                 this.photoTouch.changeOverlay(...this.lineOverlays);
             } else {
                 this.photoTouch.changeBackground(this.background);
                 this.photoTouch.changeOverlay(...this.previewOverlays);
             }
+            this.loading = false;
         },
     },
 
@@ -182,27 +187,28 @@ export default {
         this.photoTouch.on(['panend', 'pinchend', 'rotateend'], () => {
             this.isShowLine = false;
         });
-
-        this.photoTouch.on('loading', () => {
-            console.log('loading');
-        });
-
-        this.photoTouch.on('loaded', () => {
-            console.log('loaded');
-        });
     },
 
     methods: {
+        toDataURL() {
+            this.isShowLine = false;
+            this.$nextTick(() => {
+                this.dataURL = this.photoTouch.canvas.toDataURL('image/jpeg',0.7);
+                console.log(this.img.src)
+            });
+        },
         async togglePreview() {
             this.isShowLine = !this.isShowLine;
         },
 
         async onImageLoaded(e) {
+            this.loading = true;
             const { img } = e[0].source;
             this.img = img;
             this.photoTouch.changeBackground(this.background);
             this.photoTouch.changeImg(img);
             this.photoTouch.changeOverlay(...this.previewOverlays);
+            this.loading = false;
         },
 
         reset() {

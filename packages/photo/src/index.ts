@@ -42,14 +42,6 @@ export default class extends AnyEvent {
         this.context = this.canvas.getContext('2d');
     }
 
-    toDataURL(){
-        return this.canvas.toDataURL;
-    }
-
-    toBlob(){
-        return this.canvas.toBlob;
-    }
-
     get rad(): number {
         return this.angle * Math.PI / 180;
     }
