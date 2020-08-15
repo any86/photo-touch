@@ -42,6 +42,13 @@ export default class extends AnyEvent {
         this.context = this.canvas.getContext('2d');
     }
 
+    toDataURL(){
+        return this.canvas.toDataURL;
+    }
+
+    toBlob(){
+        return this.canvas.toBlob;
+    }
 
     get rad(): number {
         return this.angle * Math.PI / 180;
@@ -99,8 +106,6 @@ export default class extends AnyEvent {
         }, 0);
     }
 
-
-
     changeOrg(org: Point) {
         this.org = org;
         // 图片不动,
@@ -113,23 +118,19 @@ export default class extends AnyEvent {
      * @param overlays 覆盖图(多)
      */
     async changeOverlay(...overlays: HTMLImageElement[] | string[]) {
-        this.emit('loading');
         this.overlayImages = [];
         for (const overlay of overlays) {
             this.overlayImages.push(await loadImage(overlay));
         }
         this.render();
-        this.emit('loaded');
     }
 
     async changeBackground(...backgrounds: HTMLImageElement[] | string[]) {
-        this.emit('loading');
         this.backgroundImages = [];
         for (const background of backgrounds) {
             this.backgroundImages.push(await loadImage(background));
         }
         this.render();
-        this.emit('loaded');
     }
 
     /**
@@ -137,10 +138,8 @@ export default class extends AnyEvent {
      * @param img 
      */
     async changeImg(img: HTMLImageElement | string) {
-        this.emit('loading');
         this.img = await loadImage(img);
         this.reset();
-        this.emit('loaded');
     }
 
     /**
@@ -164,10 +163,7 @@ export default class extends AnyEvent {
         this.imgWidth = width;
         this.imgHeight = height;
         this.render();
-
     }
-
-
 
     /**
      * 移动图片
