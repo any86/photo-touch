@@ -1,5 +1,5 @@
 <template>
-    <article class="p-3">
+    <article class="page-photo-touch">
         <section class="d-flex pos-r">
             <canvas ref="canvas" style="width:100%;"></canvas>
             <p v-if="loading">loading</p>
@@ -48,7 +48,7 @@
             <ButtonLoadFile
                 class="a-button a-button--dark a-button--outline flex-1"
                 @loaded="onImageLoaded"
-            >Change Photo</ButtonLoadFile>
+            ><i class="ion-md-image font-1" style="vertical-align: sub;"/> Change</ButtonLoadFile>
 
             <button class="a-button a-button--primary flex-1" @click="toDataURL">
                 <i class="ion-md-checkmark font-1" style="vertical-align: sub;"></i> Done
@@ -219,10 +219,15 @@ export default {
 </script>
 
 <style scope lang="scss">
-article {
-    max-width: 640px;
-    margin: auto;
+@media (min-width: 640px) {
+  article.page-photo-touch {
+    max-width: 375px;
+    margin: 16px auto;
+    box-shadow: 0 0 8px 1px rgba(#000,0.1);
+    padding: 16px;
+  }
 }
+
 
 canvas {
     cursor: move;

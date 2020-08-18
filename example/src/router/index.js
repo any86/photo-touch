@@ -5,6 +5,11 @@ const routes = [
     path: '/',
     name: 'PhotoTouch',
     component: () => import(/* webpackChunkName: "PhotoTouch" */ '../views/PhotoTouch.vue')
+  },
+  {
+    path: '/merge',
+    name: 'Merge',
+    component: () => import(/* webpackChunkName: "Merge" */ '../views/Merge.vue')
   }
 ]
 
