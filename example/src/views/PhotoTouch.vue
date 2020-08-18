@@ -122,7 +122,7 @@
     </article>
 </template>
 <script>
-import PhotoTouch from '../../../packages/photo-touch/dist/index.umd';
+import PhotoTouch from '../../../packages/photo-touch/dist/photo-touch.umd';
 import ButtonLoadFile from './ButtonLoadFile';
 export default {
     name: 'DIY',
