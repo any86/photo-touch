@@ -28,7 +28,7 @@
                     </ButtonLoadFile>
                 </li>
             </ul>
-            <!-- <Crop style="border:1px solid #ccc;"/> -->
+            <Crop style="border:1px solid #ccc; width:600px;"/>
         </div>
 
         <div class="page-merge__right">
@@ -152,8 +152,8 @@ export default {
 
             > .a-button-save {
                 position: absolute;
-                left: 16px;
-                bottom: 16px;
+                left: 8px;
+                top: 8px;
                 width: 120px;
             }
         }
