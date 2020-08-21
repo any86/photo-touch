@@ -3,7 +3,7 @@
         <section class="d-flex pos-r">
             <canvas ref="canvas" style="width:100%;"></canvas>
             <p v-if="loading">loading</p>
-            <div v-if="null !== img" class="pos-a" style="width:50px; right:-20px;top:16px;">
+            <div v-if="null !== img" class="pos-a" style="width:50px; right:-8px;top:16px;">
                 <button
                     class="a-button a-button--dark ml-1"
                     style="background:rgba(0, 0, 0, 0.6); color:#fff;"
@@ -219,12 +219,15 @@ export default {
 </script>
 
 <style scope lang="scss">
+article.page-photo-touch {
+    padding: 16px;
+  }
+
 @media (min-width: 640px) {
   article.page-photo-touch {
     max-width: 375px;
     margin: 16px auto;
     box-shadow: 0 0 8px 1px rgba(#000,0.1);
-    padding: 16px;
   }
 }
 
