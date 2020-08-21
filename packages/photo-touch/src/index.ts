@@ -35,7 +35,7 @@ export default class extends Core {
 
 
         at.on('pinchmove', ({ deltaScale }: AnyTouchEvent) => {
-            this.zoom(deltaScale);
+            this.zoom(deltaScale, this.org);
         });
 
         at.on('rotatemove', ({ deltaAngle }: AnyTouchEvent) => {

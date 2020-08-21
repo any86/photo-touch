@@ -189,6 +189,8 @@ export default class extends AnyEvent {
     rotateTo(angle: number, org?: Point) {
         if (void 0 === org) {
             this.changeOrgToImageCenter();
+        } else {
+            this.org = org;
         }
         this.angle = angle;
         // 角度变了标准坐标系中的坐标变了
@@ -204,6 +206,8 @@ export default class extends AnyEvent {
     zoomTo(scale: number, org?: Point) {
         if (void 0 === org) {
             this.changeOrgToImageCenter();
+        } else {
+            this.org = org;
         }
         this.scale = scale;
         this.offsetInOA = this.switchToOA(this.offsetInOB);
