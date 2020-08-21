@@ -8,7 +8,7 @@ npm i photo-touch -S
 ```
 
 ## 快速开始
-```
+```javascript
 import PT from 'photo-touch';
 const pt = new PT(canvasEL, 800, 600);
 
