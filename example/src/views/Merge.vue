@@ -28,7 +28,6 @@
                     </ButtonLoadFile>
                 </li>
             </ul>
-            <Crop style="border:1px solid #ccc; width:600px;"/>
         </div>
 
         <div class="page-merge__right">
@@ -42,7 +41,6 @@ import { saveAs } from 'file-saver';
 import loadImage from '../../../packages/load-image/dist/index.es';
 import ButtonLoadFile from './ButtonLoadFile';
 import { POS } from './Merge.config';
-import Crop from '../components/Crop';
 export default {
     name: 'Merge',
 

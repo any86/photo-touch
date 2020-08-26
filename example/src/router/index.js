@@ -10,6 +10,11 @@ const routes = [
     path: '/merge',
     name: 'Merge',
     component: () => import(/* webpackChunkName: "Merge" */ '../views/Merge.vue')
+  },
+  {
+    path: '/crop',
+    name: 'Crop',
+    component: () => import(/* webpackChunkName: "Crop" */ '../views/Crop.vue')
   }
 ]
 
