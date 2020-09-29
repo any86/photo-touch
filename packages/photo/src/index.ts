@@ -1,4 +1,5 @@
 import AnyEvent from 'any-event';
+import type { AnyTouchEvent } from '@any-touch/shared';
 import loadImage from '@photo-touch/load-image'
 
 export type Point = [number, number];
