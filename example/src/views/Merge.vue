@@ -44,7 +44,7 @@ import { POS } from './Merge.config';
 export default {
     name: 'Merge',
 
-    components: { ButtonLoadFile,Crop },
+    components: { ButtonLoadFile },
 
     data() {
         return {
