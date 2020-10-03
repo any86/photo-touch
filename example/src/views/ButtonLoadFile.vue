@@ -38,7 +38,7 @@ export default {
                     const img = await loadImage(e.target.result);
                     const { width, height } = img;
                     const crop = this.crop(img);
-                    resolve({ source: { url: e.target.result, img, width, height }, crop });
+                    resolve({ source: {fileName:file.name, url: e.target.result, img, width, height }, crop });
                 };
 
                 reader.onerror = reject;
