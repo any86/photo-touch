@@ -61,7 +61,7 @@ export default {
         return {
             fileName: '',
             width: 1417,
-            height: 5500,
+            height: 5551,
             context: null,
             backgroundImage: null,
             imagesUploaded: [],
