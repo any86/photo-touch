@@ -34,15 +34,15 @@
 
         <div class="page-merge__right">
             <div class="form-item">
-                <label >文件名<input v-model.lazy="fileName" type="text" placeholder="请输入保存后的文件名" /></label>
+                <label>文件名<input v-model.lazy="fileName" type="text" placeholder="请输入保存后的文件名" /></label>
             </div>
 
             <div class="form-item">
-                <label >背景宽度(W)<input v-model.lazy="width" type="text" placeholder="请输入背景宽度"/></label>
+                <label>背景宽度(W)<input v-model.lazy="width" type="text" placeholder="请输入背景宽度" /></label>
             </div>
 
             <div class="form-item">
-                <label >背景高度(H)<input v-model.lazy="height" type="text" placeholder="请输入背景高度"/></label>
+                <label>背景高度(H)<input v-model.lazy="height" type="text" placeholder="请输入背景高度" /></label>
             </div>
         </div>
     </article>
@@ -52,6 +52,7 @@ import { saveAs } from 'file-saver';
 import loadImage from '../../../packages/load-image/dist/index.es';
 import ButtonLoadFile from './ButtonLoadFile';
 import { POS } from './Merge.config';
+const HEADER_HIEGHT = 200;
 export default {
     name: 'Merge',
 
@@ -61,7 +62,7 @@ export default {
         return {
             fileName: '',
             width: 1417,
-            height: 5551,
+            height: 5551 + HEADER_HIEGHT,
             context: null,
             backgroundImage: null,
             imagesUploaded: [],
@@ -80,15 +81,30 @@ export default {
         height() {
             this.render();
         },
+
+        fileName(){
+            this.render();
+        }
     },
 
     async mounted() {
         this.context = this.$refs.canvas.getContext('2d');
+        this.addText(this.fileName);
         this.backgroundImage = await loadImage(this.backgroundURLs[0]);
-        this.context.drawImage(this.backgroundImage, 0, 0);
+        this.context.drawImage(this.backgroundImage, 0, HEADER_HIEGHT);
     },
 
     methods: {
+        addText(word) {
+            this.context.save();
+            this.context.textAlign = 'right';
+            this.context.translate(this.width / 2, 0);
+            this.context.scale(-1, 1);
+            this.context.font = '100px Georgia';
+            this.context.fillText(word, this.width / 2, 140);
+            this.context.restore();
+        },
+
         save() {
             this.$refs.canvas.toBlob(
                 (blob) => {
@@ -117,6 +133,8 @@ export default {
 
         onImageLoaded(data) {
             for (const { source } of data) {
+                this.fileName = source.fileName;
+                // console.log(source)
                 const { img } = source;
                 this.imagesUploaded.push(img);
             }
@@ -126,7 +144,8 @@ export default {
         render(data) {
             const { context } = this;
             context.clearRect(0, 0, this.width, this.height);
-            context.drawImage(this.backgroundImage, 0, 0, this.width, this.height);
+            this.addText(this.fileName);
+            context.drawImage(this.backgroundImage, 0, HEADER_HIEGHT, this.width, this.height);
             if (0 < this.imagesUploaded.length) {
                 const imageLength = this.imagesUploaded.length;
                 for (const [index, { x, y, w, h }] of POS.entries()) {
