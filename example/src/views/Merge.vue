@@ -82,9 +82,9 @@ export default {
             this.render();
         },
 
-        fileName(){
+        fileName() {
             this.render();
-        }
+        },
     },
 
     async mounted() {
@@ -150,7 +150,12 @@ export default {
                 const imageLength = this.imagesUploaded.length;
                 for (const [index, { x, y, w, h }] of POS.entries()) {
                     const img = this.imagesUploaded[index % imageLength];
-                    context.drawImage(img, 0, 0, img.width, img.height, x - w / 2, y - h / 2, w, h);
+                    // const maxSize = Math.max(img.width,img.height);
+                    // const rate = Math.min(img.width,img.height) / maxSize;
+                    
+
+
+                    context.drawImage(img, 0, 0, img.width, img.height, x - w / 2, y - h / 2 + HEADER_HIEGHT, w, h);
                 }
             }
         },
