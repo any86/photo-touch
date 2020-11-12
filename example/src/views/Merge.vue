@@ -52,6 +52,8 @@ import { saveAs } from 'file-saver';
 import loadImage from '../../../packages/load-image/dist/index.es';
 import ButtonLoadFile from './ButtonLoadFile';
 import { POS } from './Merge.config';
+import { fitSize } from '../views/utils';
+
 const HEADER_HIEGHT = 200;
 export default {
     name: 'Merge',
@@ -150,12 +152,21 @@ export default {
                 const imageLength = this.imagesUploaded.length;
                 for (const [index, { x, y, w, h }] of POS.entries()) {
                     const img = this.imagesUploaded[index % imageLength];
-                    // const maxSize = Math.max(img.width,img.height);
-                    // const rate = Math.min(img.width,img.height) / maxSize;
-                    
 
-
-                    context.drawImage(img, 0, 0, img.width, img.height, x - w / 2, y - h / 2 + HEADER_HIEGHT, w, h);
+                    const rect = fitSize(img.width, img.height, w, h);
+                    // console.log(img.width, img.height, w, h,rect)
+                    context.drawImage(
+                        img,
+                        0,
+                        0,
+                        img.width,
+                        img.height,
+                        // dest
+                        x + rect.left - w / 2,
+                        y + rect.top + HEADER_HIEGHT - h / 2,
+                        rect.width,
+                        rect.height
+                    );
                 }
             }
         },

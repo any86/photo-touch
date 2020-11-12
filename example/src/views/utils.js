@@ -58,11 +58,26 @@ export function canvas(canvas) {
     context.stroke();
 }
 
-
 function drawLine(context) {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(300, 300);
     context.stroke();
     context.closePath();
+}
+
+export function fitSize(w, h, dw, dh) {
+    // 假设h是最长边
+    // const mw = dw / dh * h;
+    if (dw / dh * h >= w) {
+        const width = w * dh / h;
+        const left = (dw - width) / 2;
+        return { top: 0, left, width, height: dh };
+    }
+    // 那么w是最长边
+    else {
+        const height = h * dw / w;
+        const top = (dh - height) / 2;
+        return { top, left: 0, height, width: dw };
+    }
 }
