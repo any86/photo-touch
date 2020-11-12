@@ -69,8 +69,7 @@ export default {
             backgroundImage: null,
             imagesUploaded: [],
             backgroundURLs: [
-                'sock_bg/1.png',
-                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/merchant-taking-sale-with-chip-and-swipe-reader.jpg?v=1593507608',
+                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/AFS300baitu.png?v=1605186934',
             ],
         };
     },
