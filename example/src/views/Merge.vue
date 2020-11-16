@@ -44,7 +44,7 @@
             <div class="form-item">
                 <label>背景高度(H)<input v-model.lazy="height" type="text" placeholder="请输入背景高度" /></label>
             </div>
-            
+
             <div class="form-item">
                 <label>Y轴偏移<input v-model="offsetY" type="number" placeholder="请输入Y轴偏移" /></label>
             </div>
@@ -57,7 +57,7 @@ import loadImage from '../../../packages/load-image/dist/index.es';
 import ButtonLoadFile from './ButtonLoadFile';
 import { POS } from './Merge.config';
 import { fitSize } from '../views/utils';
-
+import { changeDpiBlob } from 'changedpi';
 const HEADER_HIEGHT = 200;
 export default {
     name: 'Merge',
@@ -66,16 +66,14 @@ export default {
 
     data() {
         return {
-            offsetY:0,
+            offsetY: 0,
             fileName: '',
             width: 1417,
             height: 5551 + HEADER_HIEGHT,
             context: null,
             backgroundImage: null,
             imagesUploaded: [],
-            backgroundURLs: [
-                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/AFS300.png?v=1605190751',
-            ],
+            backgroundURLs: ['https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/AFS300.png?v=1605190751'],
         };
     },
 
@@ -92,9 +90,9 @@ export default {
             this.render();
         },
 
-        offsetY(){
+        offsetY() {
             this.render();
-        }
+        },
     },
 
     async mounted() {
@@ -118,7 +116,9 @@ export default {
         save() {
             this.$refs.canvas.toBlob(
                 (blob) => {
-                    saveAs(blob, `${this.fileName}.png`);
+                    changeDpiBlob(blob, 300).then((b2) => {
+                        saveAs(b2, `${this.fileName}.png`);
+                    });
                 },
                 'image/png',
                 1
@@ -171,7 +171,7 @@ export default {
                         img.height,
                         // dest
                         x + rect.left - w / 2,
-                        y + rect.top + HEADER_HIEGHT - h / 2+this.offsetY,
+                        y + rect.top + HEADER_HIEGHT - h / 2 + this.offsetY,
                         rect.width,
                         rect.height
                     );
