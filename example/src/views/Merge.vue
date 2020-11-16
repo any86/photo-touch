@@ -44,6 +44,10 @@
             <div class="form-item">
                 <label>背景高度(H)<input v-model.lazy="height" type="text" placeholder="请输入背景高度" /></label>
             </div>
+            
+            <div class="form-item">
+                <label>Y轴偏移<input v-model="offsetY" type="number" placeholder="请输入Y轴偏移" /></label>
+            </div>
         </div>
     </article>
 </template>
@@ -62,6 +66,7 @@ export default {
 
     data() {
         return {
+            offsetY:0,
             fileName: '',
             width: 1417,
             height: 5551 + HEADER_HIEGHT,
@@ -86,6 +91,10 @@ export default {
         fileName() {
             this.render();
         },
+
+        offsetY(){
+            this.render();
+        }
     },
 
     async mounted() {
@@ -162,7 +171,7 @@ export default {
                         img.height,
                         // dest
                         x + rect.left - w / 2,
-                        y + rect.top + HEADER_HIEGHT - h / 2,
+                        y + rect.top + HEADER_HIEGHT - h / 2+this.offsetY,
                         rect.width,
                         rect.height
                     );
