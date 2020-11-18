@@ -1,5 +1,7 @@
 <template>
-    <router-view />
+    <div id="app">
+        <router-view />
+    </div>
 </template>
 
 <style lang="scss">
@@ -12,7 +14,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 4px; 
+    width: 4px;
     height: 4px;
     background: #ccc;
 }

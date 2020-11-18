@@ -1,5 +1,5 @@
 {
-  "name": "photo-touch-demo",
+  "name": "example",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,18 +8,22 @@
   },
   "dependencies": {
     "@5a/css": "^0.0.9",
+    "axios": "^0.21.0",
     "changedpi": "^1.0.4",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
-    "vue": "^3.0.0-0",
-    "vue-router": "^4.0.0-0"
+    "leancloud-storage": "^4.7.0",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0-0",
     "sass": "^1.26.5",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
   }
 }

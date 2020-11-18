@@ -12,10 +12,6 @@
         </div>
 
         <div class="page-merge__middle">
-            <button class="button-big a-button a-button--success a-button-save" @click="save">
-                <i class="ion-md-cloud-download" /> 保存
-            </button>
-
             <ButtonLoadFile
                 @loaded="changeBackground"
                 class="button-big p-0 a-button a-button--dark a-button-change-background"
@@ -25,6 +21,13 @@
             <ButtonLoadFile @loaded="onImageLoaded" class="button-big p-0 a-button a-button--dark a-button--outline">
                 <i class="ion-md-folder-open" /> 打开
             </ButtonLoadFile>
+            <button class="button-big a-button a-button--success a-button-save" @click="save">
+                <i class="ion-md-cloud-download" /> 保存
+            </button>
+
+            <button class="button-big a-button a-button--danger a-button-save" @click="clear">
+                <i class="ion-md-cloud-download" /> 清空
+            </button>
             <ul class="mt-2">
                 <li class="img" v-for="{ src } in imagesUploaded" :key="src">
                     <img :src="src" />
@@ -34,7 +37,13 @@
 
         <div class="page-merge__right">
             <div class="form-item">
-                <label>文件名<input v-model.lazy="fileName" type="text" placeholder="请输入保存后的文件名" /></label>
+                <label
+                    >文件名<input
+                        :value="fileName"
+                        @input="changeFileName"
+                        type="text"
+                        placeholder="请输入保存后的文件名"
+                /></label>
             </div>
 
             <div class="form-item">
@@ -58,6 +67,7 @@ import ButtonLoadFile from './ButtonLoadFile';
 import { POS } from './Merge.config';
 import { fitSize } from '../views/utils';
 import { changeDpiBlob } from 'changedpi';
+import axios from 'axios';
 const HEADER_HIEGHT = 200;
 export default {
     name: 'Merge',
@@ -72,6 +82,7 @@ export default {
             height: 5551 + HEADER_HIEGHT,
             context: null,
             backgroundImage: null,
+            // 用户上传图
             imagesUploaded: [],
             backgroundURLs: ['https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/AFS300.png?v=1605190751'],
         };
@@ -86,23 +97,26 @@ export default {
             this.render();
         },
 
-        fileName() {
-            this.render();
-        },
-
         offsetY() {
             this.render();
         },
     },
 
     async mounted() {
+        this.imagesUploaded = [];
         this.context = this.$refs.canvas.getContext('2d');
-        this.addText(this.fileName);
+        const { fileName, file_url } = this.$store.state.mergeData;
+        this.fileName = fileName;
         this.backgroundImage = await loadImage(this.backgroundURLs[0]);
-        this.context.drawImage(this.backgroundImage, 0, HEADER_HIEGHT);
+        this.imagesUploaded.push(await loadImage(file_url));
+        this.render();
     },
 
     methods: {
+        changeFileName(e) {
+            this.fileName = e.target.value;
+            this.render();
+        },
         addText(word) {
             this.context.save();
             this.context.textAlign = 'right';
@@ -150,8 +164,12 @@ export default {
             }
             this.render();
         },
+        clear() {
+            this.imagesUploaded = [];
+            this.render();
+        },
 
-        render(data) {
+        render() {
             const { context } = this;
             context.clearRect(0, 0, this.width, this.height);
             this.addText(this.fileName);
@@ -162,7 +180,7 @@ export default {
                     const img = this.imagesUploaded[index % imageLength];
 
                     const rect = fitSize(img.width, img.height, w, h);
-                    // console.log(img.width, img.height, w, h,rect)
+                    // console.log(img.width, img.height, w, h, rect);
                     context.drawImage(
                         img,
                         0,
@@ -171,7 +189,7 @@ export default {
                         img.height,
                         // dest
                         x + rect.left - w / 2,
-                        y + rect.top + HEADER_HIEGHT - h / 2 + this.offsetY,
+                        y + rect.top + HEADER_HIEGHT - h / 2 + Number(this.offsetY),
                         rect.width,
                         rect.height
                     );
