@@ -68,7 +68,7 @@ import { POS } from './Merge.config';
 import { fitSize } from '../views/utils';
 import { changeDpiBlob } from 'changedpi';
 import axios from 'axios';
-const HEADER_HIEGHT = 200;
+const HEADER_HIEGHT = 120;
 export default {
     name: 'Merge',
 
@@ -123,7 +123,7 @@ export default {
             this.context.translate(this.width / 2, 0);
             this.context.scale(-1, 1);
             this.context.font = '100px Georgia';
-            this.context.fillText(word, this.width / 2, 140);
+            this.context.fillText(word, this.width / 2, 90);
             this.context.restore();
         },
 

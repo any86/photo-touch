@@ -2,7 +2,7 @@
     <ul class="orders">
         <li class="order" v-for="order in ORDERS" :key="order.name">
             <h1>{{ order.name }}({{ order.items.length }}张)</h1>
-            <div class="order__info mt-1" v-for="(item, index) in order.items" :key="item.image">
+            <div class="order__info mt-1" v-for="(item) in order.items" :key="item.image">
                 <img :src="item.image" alt="用户头像" />
 
                 <img v-if="void 0 !== map[item.id]" class="ml-2" :src="map[item.id].file_url" alt="用户头像" />
@@ -15,8 +15,8 @@
                 <span
                     v-if="map[item.id]"
                     class="a-button a-button--outline a-button--primary ml-1 order__info__button-merge"
-                    @click="goToMerge(map[item.id].file_url, item, order.name + '-' + (1 + index))"
-                    > 
+                    @click="goToMerge(map[item.id].file_url, item, order.name)"
+                >
                     <i class="ion-ios-images"></i>
                     合成</span
                 >
@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$row-height : 140px;
+$row-height: 140px;
 .orders {
     .order {
         padding: 16px;
