@@ -12,6 +12,7 @@
                     {{ void 0 !== map[item.id] ? '重新上传' : '上传' }}
                 </label>
 
+
                 <span
                     v-if="map[item.id]"
                     class="a-button a-button--outline a-button--primary ml-1 order__info__button-merge"
@@ -20,6 +21,14 @@
                     <i class="ion-ios-images"></i>
                     合成</span
                 >
+
+
+                <span class="p-1">
+                    <p>标题: {{item.title}}</p>
+                    <p>数量: {{item.quantity}}</p>
+                    <p>sku: {{item.sku}}</p>
+                    <p>选项: {{item.variant_title}}</p>
+                </span>
             </div>
         </li>
     </ul>

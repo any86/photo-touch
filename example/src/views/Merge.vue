@@ -28,11 +28,19 @@
             <button class="button-big a-button a-button--danger a-button-save" @click="clear">
                 <i class="ion-md-cloud-download" /> 清空
             </button>
+
             <ul class="mt-2">
                 <li class="img" v-for="{ src } in imagesUploaded" :key="src">
                     <img :src="src" />
                 </li>
             </ul>
+
+            <div class="mt-2">
+                <h1>订单信息</h1>
+                <h3>{{ $store.state.mergeData.sku }}</h3>
+                <h3>{{ $store.state.mergeData.variant_title }}</h3>
+                <h3 class="text-danger">数量: {{ $store.state.mergeData.quantity }}</h3>
+            </div>
         </div>
 
         <div class="page-merge__right">
@@ -119,10 +127,14 @@ export default {
         },
         addText(word) {
             this.context.save();
+            // 填充白色矩形
+            this.context.fillStyle ='#fff';
+            this.context.fillRect(0,0,this.width,HEADER_HIEGHT);
             this.context.textAlign = 'right';
             this.context.translate(this.width / 2, 0);
             this.context.scale(-1, 1);
             this.context.font = '100px Georgia';
+            this.context.fillStyle ='#000';
             this.context.fillText(word, this.width / 2, 90);
             this.context.restore();
         },
@@ -131,10 +143,11 @@ export default {
             this.$refs.canvas.toBlob(
                 (blob) => {
                     changeDpiBlob(blob, 300).then((b2) => {
-                        saveAs(b2, `${this.fileName}.png`);
+                        const { sku, variant_title } = this.$store.state.mergeData;
+                        saveAs(b2, `${this.fileName} - [${sku}] - [${variant_title}].jpg`);
                     });
                 },
-                'image/png',
+                'image/jpeg',
                 1
             );
         },
@@ -151,7 +164,6 @@ export default {
             const { source } = data[0];
             const { img, fileName } = source;
             this.backgroundImage = img;
-            // this.fileName = fileName.split('.')[0];
             this.render();
         },
 
