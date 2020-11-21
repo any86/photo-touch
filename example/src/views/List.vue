@@ -1,37 +1,49 @@
 <template>
-    <ul class="orders">
-        <li class="order" v-for="order in ORDERS" :key="order.name">
-            <h1>{{ order.name }}({{ order.items.length }}张)</h1>
-            <div class="order__info mt-1" v-for="(item) in order.items" :key="item.image">
-                <img :src="item.image" alt="用户头像" />
+    <article>
+        <Spin v-if="isLoading" fix size="large" style="position: fixed"></Spin>
+        <BackTop></BackTop>
+        <header class="header">
+            <h4>显示删除按钮 <i-switch v-model="isShowButtonRemove" true-color="#ff4949" ></i-switch></h4></header>
+        <ul class="orders">
+            <li class="order" v-for="order in ORDERS" :key="order.name">
+                <h1>{{ order.name }}({{ order.items.length }}张)</h1>
+                <div class="order__info mt-1" v-for="item in order.items" :key="item.id">
+                    <img v-lazy="item.image" alt="用户上传图" />
 
-                <img v-if="void 0 !== map[item.id]" class="ml-2" :src="map[item.id].file_url" alt="用户头像" />
-                <label class="order__info__upload">
-                    <input type="file" @change="onFileChange(item.id, $event)" />
-                    <i class="ion-ios-image"></i>
-                    {{ void 0 !== map[item.id] ? '重新上传' : '上传' }}
-                </label>
+                    <!-- 用户头像 -->
+                    <span v-for="it in map[item.id]" class="order__info__crop-image" :key="it.file_id">
+                        <!-- {{it.file_id}} -->
+                        <img v-lazy="it.file_url" alt="用户头像" />
+                        <p v-show="isShowButtonRemove" class="order__info__crop-image__button-remove" @click="removeCropImage(it)">
+                            <Icon type="md-close" /> 删除
+                        </p>
+                    </span>
 
+                    <label class="order__info__upload">
+                        <input type="file" @change="onFileChange(item.id, $event)" />
+                        <Icon type="md-cloud-upload" />
+                        上传
+                    </label>
 
-                <span
-                    v-if="map[item.id]"
-                    class="a-button a-button--outline a-button--primary ml-1 order__info__button-merge"
-                    @click="goToMerge(map[item.id].file_url, item, order.name)"
-                >
-                    <i class="ion-ios-images"></i>
-                    合成</span
-                >
+                    <span
+                        v-if="map[item.id]"
+                        class="a-button a-button--outline a-button--primary ml-1 order__info__button-merge"
+                        @click="goToMerge(map[item.id], item, order.name)"
+                    >
+                        <Icon type="md-play" />
+                        合成</span
+                    >
 
-
-                <span class="p-1">
-                    <p>标题: {{item.title}}</p>
-                    <p>数量: {{item.quantity}}</p>
-                    <p>sku: {{item.sku}}</p>
-                    <p>选项: {{item.variant_title}}</p>
-                </span>
-            </div>
-        </li>
-    </ul>
+                    <span class="p-1">
+                        <p>标题: {{ item.title }}</p>
+                        <p>数量: {{ item.quantity }}</p>
+                        <p>sku: {{ item.sku }}</p>
+                        <p>选项: {{ item.variant_title }}</p>
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </article>
 </template>
 
 <script>
@@ -50,6 +62,8 @@ export default {
 
     data() {
         return {
+            isLoading: true,
+            isShowButtonRemove:false,
             token: '',
             // 订单
             ORDERS,
@@ -62,7 +76,11 @@ export default {
         map() {
             const map = {};
             this.cropList.forEach((item) => {
-                map[item.item_id] = item;
+                if (void 0 === map[item.item_id]) {
+                    map[item.item_id] = [item];
+                } else {
+                    map[item.item_id].push(item);
+                }
             });
             return map;
         },
@@ -70,24 +88,33 @@ export default {
 
     async mounted() {
         await this.getCropList();
+        // this.cropList.forEach((item) => {
+        //     console.log(item)
+        // });
     },
 
     methods: {
         /**
          * 跳转到合成页面
-         * @param file_url 用户头像
+         * @param cropImages 用户头像
          * @param item 所在购物车商品信息
          */
-        goToMerge(file_url, item, fileName) {
-            this.$store.commit('setMergeData', { ...item, file_url, fileName });
+        goToMerge(cropImages, item, fileName) {
+            this.$store.commit('setMergeData', {
+                ...item,
+                cropImageURLs: cropImages.map(({ file_url }) => file_url),
+                fileName,
+            });
             this.$router.push({ path: '/merge' });
         },
 
         async getCropList() {
+            this.isLoading = true;
             const query = new AV.Query('OrderImage');
             // 检查是否上传过图片
             const row = await query.find();
             this.cropList = row.map((item) => item.toJSON());
+            this.isLoading = false;
         },
 
         /**
@@ -97,6 +124,7 @@ export default {
          * @param e 原生上传事件对象
          */
         async onFileChange(item_id, e) {
+            this.isLoading = true;
             const fileObj = new AV.File(`${item_id}.png`, e.target.files[0]);
             const file = await fileObj.save();
             const query = new AV.Query('OrderImage');
@@ -104,21 +132,28 @@ export default {
             query.equalTo('item_id', item_id);
             const row = await query.find();
             // 添加
-            if (0 === row.length) {
-                const todo = new AV.Object('OrderImage');
-                todo.set('item_id', item_id);
-                todo.set('file_id', file.id);
-                todo.set('file_url', file.toJSON().url);
-                await todo.save();
-            }
-            // 编辑
-            else {
-                const todo = AV.Object.createWithoutData('OrderImage', row[0].id);
-                todo.set('file_id', file.id);
-                todo.set('file_url', file.toJSON().url);
-                await todo.save();
-            }
+            // if (0 === row.length) {
+            const todo = new AV.Object('OrderImage');
+            todo.set('item_id', item_id);
+            todo.set('file_id', file.id);
+            todo.set('file_url', file.toJSON().url);
+            await todo.save();
             this.getCropList();
+        },
+
+        /**
+         * 删除裁剪后的图片
+         * @param row
+         */
+        removeCropImage(row) {
+            this.$Modal.confirm({
+                title: '是否删除?',
+                onOk: async () => {
+                    const todo = AV.Object.createWithoutData('OrderImage', row.objectId);
+                    await todo.destroy();
+                    this.getCropList();
+                },
+            });
         },
     },
 };
@@ -126,7 +161,18 @@ export default {
 
 <style scoped lang="scss">
 $row-height: 140px;
+
+.header{
+    position: fixed;
+    z-index:2;
+    top:0;left:0;padding:16px;
+    box-shadow: 0 1px 5px rgba(#000,0.2);
+    background: rgba(#fff,0.9);
+    width:100%;
+}
+
 .orders {
+    margin-top:48px;
     .order {
         padding: 16px;
         // box-shadow: 0 0 8px 1px rgba(#000, 0.1);
@@ -146,6 +192,28 @@ $row-height: 140px;
                 width: $row-height;
                 display: block;
                 margin-bottom: 8px;
+            }
+
+            &__crop-image {
+                text-align: center;
+                margin-left: 16px;
+                height: $row-height - 30px;
+                width: $row-height;
+                > img {
+                    height: 100%;
+                    display: block;
+                }
+                &__button-remove {
+                    font-size: 12px;
+                    display: inline-block;
+                    margin-top: 4px;
+                    padding: 4px;
+                    text-align: center;
+                    background: crimson;
+                    border-radius: 4px;
+                    color: #fff;
+                    cursor: pointer;
+                }
             }
             &__upload {
                 border-radius: 4px;

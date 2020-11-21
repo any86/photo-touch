@@ -92,7 +92,9 @@ export default {
             backgroundImage: null,
             // 用户上传图
             imagesUploaded: [],
-            backgroundURLs: ['https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/AFS300.png?v=1605190751'],
+            backgroundURLs: [
+                'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/AFS1001-Black.png?v=1605943842',
+            ],
         };
     },
 
@@ -113,10 +115,12 @@ export default {
     async mounted() {
         this.imagesUploaded = [];
         this.context = this.$refs.canvas.getContext('2d');
-        const { fileName, file_url } = this.$store.state.mergeData;
+        const { fileName, cropImageURLs } = this.$store.state.mergeData;
         this.fileName = fileName;
         this.backgroundImage = await loadImage(this.backgroundURLs[0]);
-        this.imagesUploaded.push(await loadImage(file_url));
+        for (const file_url of cropImageURLs) {
+            this.imagesUploaded.push(await loadImage(file_url));
+        }
         this.render();
     },
 
@@ -128,13 +132,13 @@ export default {
         addText(word) {
             this.context.save();
             // 填充白色矩形
-            this.context.fillStyle ='#fff';
-            this.context.fillRect(0,0,this.width,HEADER_HIEGHT);
+            this.context.fillStyle = '#fff';
+            this.context.fillRect(0, 0, this.width, HEADER_HIEGHT);
             this.context.textAlign = 'right';
             this.context.translate(this.width / 2, 0);
             this.context.scale(-1, 1);
             this.context.font = '100px Georgia';
-            this.context.fillStyle ='#000';
+            this.context.fillStyle = '#000';
             this.context.fillText(word, this.width / 2, 90);
             this.context.restore();
         },
