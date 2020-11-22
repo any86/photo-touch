@@ -4,7 +4,8 @@
         <BackTop></BackTop>
         <header class="header">
             <div class="flex-1"></div>
-            <h4>显示删除按钮 <i-switch v-model="isShowButtonRemove" true-color="#ff4949" ></i-switch></h4></header>
+            <h4>显示删除按钮 <i-switch v-model="isShowButtonRemove" true-color="#ff4949"></i-switch></h4>
+        </header>
         <ul class="orders">
             <li class="order" v-for="order in ORDERS" :key="order.name">
                 <h1>{{ order.name }}({{ order.items.length }}张)</h1>
@@ -15,7 +16,11 @@
                     <span v-for="it in map[item.id]" class="order__info__crop-image" :key="it.file_id">
                         <!-- {{it.file_id}} -->
                         <img v-lazy="it.file_url" alt="用户头像" />
-                        <p v-show="isShowButtonRemove" class="order__info__crop-image__button-remove" @click="removeCropImage(it)">
+                        <p
+                            v-show="isShowButtonRemove"
+                            class="order__info__crop-image__button-remove"
+                            @click="removeCropImage(it)"
+                        >
                             <Icon type="md-close" /> 删除
                         </p>
                     </span>
@@ -49,23 +54,15 @@
 
 <script>
 const ORDERS = require('../../order.json');
-
 // const CryptoJS = require('crypto-js');
-const AV = require('leancloud-storage');
-AV.init({
-    appId: 'vJNmEEOC7YmjcmMVSYy9RnSk-gzGzoHsz',
-    appKey: '18Cff63ypKTyKVdzwkUUVH7M',
-    serverURL: 'https://vjnmeeoc.lc-cn-n1-shared.com',
-});
-
+import AV from './lean';
 export default {
     name: 'List',
 
     data() {
         return {
             isLoading: true,
-            isShowButtonRemove:false,
-            token: '',
+            isShowButtonRemove: false,
             // 订单
             ORDERS,
             // 用户头像
@@ -133,7 +130,6 @@ export default {
             query.equalTo('item_id', item_id);
             const row = await query.find();
             // 添加
-            // if (0 === row.length) {
             const todo = new AV.Object('OrderImage');
             todo.set('item_id', item_id);
             todo.set('file_id', file.id);
@@ -163,18 +159,20 @@ export default {
 <style scoped lang="scss">
 $row-height: 140px;
 
-.header{
+.header {
     position: fixed;
     display: flex;
-    z-index:2;
-    top:0;left:0;padding:16px;
-    box-shadow: 0 1px 5px rgba(#000,0.2);
-    background: rgba(#fff,0.9);
-    width:100%;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    padding: 16px;
+    box-shadow: 0 1px 5px rgba(#000, 0.2);
+    background: rgba(#fff, 0.9);
+    width: 100%;
 }
 
 .orders {
-    margin-top:48px;
+    margin-top: 48px;
     .order {
         padding: 16px;
         // box-shadow: 0 0 8px 1px rgba(#000, 0.1);

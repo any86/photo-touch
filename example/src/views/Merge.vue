@@ -29,6 +29,7 @@
                 <i class="ion-md-cloud-download" /> 清空
             </button>
 
+
             <ul class="mt-2">
                 <li class="img" v-for="{ src } in imagesUploaded" :key="src">
                     <img :src="src" />
@@ -41,16 +42,27 @@
                 <h3>{{ $store.state.mergeData.variant_title }}</h3>
                 <h3 class="text-danger">数量: {{ $store.state.mergeData.quantity }}</h3>
             </div>
+
+            <!-- 背景图列表 -->
+            <div v-if="0 < activeBackgroundList.length">
+                <span  
+                    @click="changeBackgroundOnline(item.url)"
+                    v-for="item in activeBackgroundList" :key="item.url" class="ovh d-inline-block mr-1" style="border: 2px solid #ddd;">
+                    <img :src="item.url" class="d-block" width="56"  height="200"/>
+                    <h4>{{item.fileName}}</h4>
+
+                </span>
+            </div>
         </div>
 
         <div class="page-merge__right">
             <div class="form-item">
                 <label
-                    >文件名<input
+                    >订单号<input
                         :value="fileName"
                         @input="changeFileName"
                         type="text"
-                        placeholder="请输入保存后的文件名"
+                        placeholder="请输入保存后的订单号"
                 /></label>
             </div>
 
@@ -70,12 +82,12 @@
 </template>
 <script>
 import { saveAs } from 'file-saver';
+import AV from './lean';
 import loadImage from '../../../packages/load-image/dist/index.es';
 import ButtonLoadFile from './ButtonLoadFile';
 import { POS } from './Merge.config';
 import { fitSize } from '../views/utils';
 import { changeDpiBlob } from 'changedpi';
-import axios from 'axios';
 const HEADER_HIEGHT = 120;
 export default {
     name: 'Merge',
@@ -92,10 +104,17 @@ export default {
             backgroundImage: null,
             // 用户上传图
             imagesUploaded: [],
+            backgroundMap: {},
             backgroundURLs: [
                 'https://cdn.shopifycdn.net/s/files/1/0276/2922/4000/files/AFS1001-Black.png?v=1605943842',
             ],
         };
+    },
+
+    computed: {
+        activeBackgroundList() {
+            return this.backgroundMap[this.$store.state.mergeData.sku] || [];
+        },
     },
 
     watch: {
@@ -113,11 +132,12 @@ export default {
     },
 
     async mounted() {
+        await this.getBgMap();
         this.imagesUploaded = [];
         this.context = this.$refs.canvas.getContext('2d');
         const { fileName, cropImageURLs } = this.$store.state.mergeData;
         this.fileName = fileName;
-        this.backgroundImage = await loadImage(this.backgroundURLs[0]);
+        this.backgroundImage = await loadImage(1 === this.activeBackgroundList.length ? this.activeBackgroundList[0].url :'#fff');
         for (const file_url of cropImageURLs) {
             this.imagesUploaded.push(await loadImage(file_url));
         }
@@ -125,6 +145,25 @@ export default {
     },
 
     methods: {
+        async getBgMap() {
+            this.isLoading = true;
+            const query = new AV.Query('BackgroundImageMap');
+            // 检查是否上传过图片
+            const row = await query.find();
+            const data = row.map((item) => item.toJSON());
+            data.forEach(({ sku, fileName, url }) => {
+                // this.backgroundMap[sku] = this.backgroundMap[sku] || [];
+                if (void 0 === this.backgroundMap[sku]) {
+                    this.$set(this.backgroundMap, sku, []);
+                }
+                this.backgroundMap[sku].push({
+                    fileName,
+                    url,
+                });
+            });
+            this.isLoading = false;
+        },
+
         changeFileName(e) {
             this.fileName = e.target.value;
             this.render();
@@ -157,8 +196,10 @@ export default {
         },
 
         async changeBackgroundOnline(url) {
+            this.isLoading = true;
             this.backgroundImage = await loadImage(url);
             this.render();
+            this.isLoading = false;
         },
 
         /**

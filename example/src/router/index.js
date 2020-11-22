@@ -8,6 +8,12 @@ const routes = [
     name: 'PhotoTouch',
     component: () => import(/* webpackChunkName: "PhotoTouch" */ '../views/PhotoTouch.vue')
   },
+
+  {
+    path: '/map',
+    name: 'Map',
+    component: () => import(/* webpackChunkName: "Map" */ '../views/Map.vue')
+  },
   {
     path: '/merge',
     name: 'Merge',
