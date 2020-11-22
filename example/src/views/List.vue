@@ -3,6 +3,7 @@
         <Spin v-if="isLoading" fix size="large" style="position: fixed"></Spin>
         <BackTop></BackTop>
         <header class="header">
+            <div class="flex-1"></div>
             <h4>显示删除按钮 <i-switch v-model="isShowButtonRemove" true-color="#ff4949" ></i-switch></h4></header>
         <ul class="orders">
             <li class="order" v-for="order in ORDERS" :key="order.name">
@@ -164,6 +165,7 @@ $row-height: 140px;
 
 .header{
     position: fixed;
+    display: flex;
     z-index:2;
     top:0;left:0;padding:16px;
     box-shadow: 0 1px 5px rgba(#000,0.2);
