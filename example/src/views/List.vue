@@ -41,7 +41,7 @@
                     >
 
                     <span class="p-1">
-                        <p>标题: {{ item.title }}</p>
+                        <p><a :href="genURL(item.title)" target="_new">标题: {{ item.title }}</a></p>
                         <p>数量: {{ item.quantity }}</p>
                         <p>sku: {{ item.sku }}</p>
                         <p>选项: {{ item.variant_title }}</p>
@@ -92,6 +92,11 @@ export default {
     },
 
     methods: {
+        genURL(title){
+           const id =  title.split(' ').map(word=> word.toLowerCase()).join('-');
+           const url = 'https://findbestgift.com/collections/sales/products/';
+           return url+id;
+        },
         /**
          * 跳转到合成页面
          * @param cropImages 用户头像
