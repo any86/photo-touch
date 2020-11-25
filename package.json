@@ -20,7 +20,7 @@
         "bootstrap":"lerna bootstrap",
         "dev:ex": "cd example && npm run serve",
         "build:ex": "cd example && npm run build",
-        "release:ex": "npm run build:ex && node ./scripts/releaseExample.js",
+        "release:ex": "node ./example/test.js && npm run build:ex && node ./scripts/releaseExample.js",
         "release:next": "npm run build && lerna publish --force-publish --dist-tag next",
         "release:last": "npm run build && lerna publish --force-publish",
         "rm": "rimraf packages/**/dist",
