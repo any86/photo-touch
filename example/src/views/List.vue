@@ -42,7 +42,9 @@
 
                     <span class="p-1">
                         <p><a :href="genURL(item.title)" target="_new">标题: {{ item.title }}</a></p>
-                        <p>数量: {{ item.quantity }}</p>
+                        <p v-if="1 == item.quantity">数量: {{ item.quantity }}</p>
+                        <p v-else class="text-danger">数量: {{ item.quantity }}</p>
+
                         <p>sku: {{ item.sku }}</p>
                         <p>选项: {{ item.variant_title }}</p>
                     </span>
