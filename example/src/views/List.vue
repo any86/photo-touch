@@ -11,15 +11,13 @@
                 <h1>{{ order.name }}({{ order.items.length }}张)</h1>
                 <div class="order__info mt-1" v-for="item in order.items" :key="item.id">
                     <img v-lazy="item.image" alt="用户上传图" />
-
-                    <!-- 用户头像 -->
-                    <span v-for="it in map[item.id]" class="order__info__crop-image" :key="it.file_id">
-                        <!-- {{it.file_id}} -->
-                        <img v-lazy="it.file_url" alt="用户头像" />
+                    <!-- 抠图后 -->
+                    <span v-for="row in map[item.id]" class="order__info__crop-image" :key="row.file_id">
+                        <img v-lazy="row.file_url" alt="抠图" />
                         <p
                             v-show="isShowButtonRemove"
                             class="order__info__crop-image__button-remove"
-                            @click="removeCropImage(it)"
+                            @click="removeCropImage(row)"
                         >
                             <Icon type="md-close" /> 删除
                         </p>
@@ -41,7 +39,9 @@
                     >
 
                     <span class="p-1">
-                        <p><a :href="genURL(item.title)" target="_new">标题: {{ item.title }}</a></p>
+                        <p>
+                            <a :href="genURL(item.title)" target="_new">标题: {{ item.title }}</a>
+                        </p>
                         <p v-if="1 == item.quantity">数量: {{ item.quantity }}</p>
                         <p v-else class="text-danger">数量: {{ item.quantity }}</p>
 
@@ -76,6 +76,7 @@ export default {
         map() {
             const map = {};
             this.cropList.forEach((item) => {
+                console.log(item.item_id > 6158316896320)
                 if (void 0 === map[item.item_id]) {
                     map[item.item_id] = [item];
                 } else {
@@ -94,10 +95,13 @@ export default {
     },
 
     methods: {
-        genURL(title){
-           const id =  title.split(' ').map(word=> word.toLowerCase()).join('-');
-           const url = 'https://findbestgift.com/collections/sales/products/';
-           return url+id;
+        genURL(title) {
+            const id = title
+                .split(' ')
+                .map((word) => word.toLowerCase())
+                .join('-');
+            const url = 'https://findbestgift.com/collections/sales/products/';
+            return url + id;
         },
         /**
          * 跳转到合成页面
@@ -117,6 +121,8 @@ export default {
             this.isLoading = true;
             const query = new AV.Query('OrderImage');
             // 检查是否上传过图片
+            query.limit(1000);
+            // query.equalTo('item_id', 6158316863552);
             const row = await query.find();
             this.cropList = row.map((item) => item.toJSON());
             this.isLoading = false;
