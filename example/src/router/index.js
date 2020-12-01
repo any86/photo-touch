@@ -19,10 +19,22 @@ const routes = [
     name: 'Merge',
     component: () => import(/* webpackChunkName: "Merge" */ '../views/Merge.vue')
   },
+
+  {
+    path: '/merge-0',
+    name: 'Merge0',
+    component: () => import(/* webpackChunkName: "Merge" */ '../views/Merge0.vue')
+  },
   {
     path: '/list',
     name: 'List',
     component: () => import(/* webpackChunkName: "List" */ '../views/List.vue')
+  },
+
+  {
+    path: '/table',
+    name: 'Table',
+    component: () => import(/* webpackChunkName: "Table" */ '../views/Table.vue')
   },
   {
     path: '/crop',

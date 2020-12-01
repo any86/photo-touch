@@ -6,6 +6,7 @@
             <div class="flex-1"></div>
             <h4>显示删除按钮 <i-switch v-model="isShowButtonRemove" true-color="#ff4949"></i-switch></h4>
         </header>
+
         <ul class="orders">
             <li class="order" v-for="order in ORDERS" :key="order.name">
                 <h1>{{ order.name }}({{ order.items.length }}张)</h1>
@@ -76,7 +77,7 @@ export default {
         map() {
             const map = {};
             this.cropList.forEach((item) => {
-                console.log(item.item_id > 6158316896320)
+                console.log(item.item_id > 6158316896320);
                 if (void 0 === map[item.item_id]) {
                     map[item.item_id] = [item];
                 } else {
@@ -114,7 +115,7 @@ export default {
                 cropImageURLs: cropImages.map(({ file_url }) => file_url),
                 fileName,
             });
-            this.$router.push({ path: '/merge' });
+            this.$router.push({ path: '/merge-0' });
         },
 
         async getCropList() {
